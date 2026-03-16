@@ -30,10 +30,22 @@
 # Here are a few primitive math functions coded in the above style.
 # In Ruby, we call the 'goto' using .call() or the shorthand .()
 
-def add(x, y, goto) = goto.call(x + y)
-def mul(x, y, goto) = goto.call(x * y)
-def sub(x, y, goto) = goto.call(x - y)
-def div(x, y, goto) = goto.call(x / y)
+def add(x, y, goto)
+  goto.call(x + y)
+  nil
+end
+def mul(x, y, goto)
+  goto.call(x * y)
+  nil
+end
+def sub(x, y, goto)
+  goto.call(x - y)
+  nil
+end
+def div(x, y, goto) 
+  goto.call(x / y)
+  nil
+end
 
 # TODO: Show how you would use combinations of these functions and `method(:puts)`
 # to calculate and print the result of computing 2*(10-2)/4 + 3.
@@ -46,9 +58,18 @@ def div(x, y, goto) = goto.call(x / y)
 #
 # Let's add a few comparison operations into the mix.
 
-def eq(x, y, goto) = goto.call(x == y)
-def lt(x, y, goto) = goto.call(x < y)
-def gt(x, y, goto) = goto.call(x > y)
+def eq(x, y, goto) 
+  goto.call(x == y)
+  nil
+end
+def lt(x, y, goto) 
+  goto.call(x < y)
+  nil
+end
+def gt(x, y, goto) 
+  goto.call(x > y)
+  nil
+end
 
 # TODO: Implement a function to compute the maximum value of x and y.
 # Reminder: You are *NOT* allowed to use `if` or ternary operators.
