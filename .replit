@@ -24,3 +24,6 @@ args = "ruby main.rb"
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[nix]
+packages = ["entr"]
