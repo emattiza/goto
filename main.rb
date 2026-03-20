@@ -16,6 +16,8 @@
 #    - NO `while`, `until`, `for`, or `.each` loops.
 #    - NO `begin`, `rescue`, or `ensure`
 #    - NO `return` statement.
+#    - NO implicit returns from functions.
+#    - NO `break`, `next`, or `redo` statements.
 #
 # You begrudgingly allow yourself to keep the `def` statement and
 # lambdas/procs because only a crazy person would also get rid of code organization.
@@ -29,23 +31,14 @@
 #
 # Here are a few primitive math functions coded in the above style.
 # In Ruby, we call the 'goto' using .call() or the shorthand .()
-puts "=============================="
 
 def add(x, y, goto)
-  goto.call(x + y)
-  nil
 end
 def mul(x, y, goto)
-  goto.call(x * y)
-  nil
 end
 def sub(x, y, goto)
-  goto.call(x - y)
-  nil
 end
 def div(x, y, goto) 
-  goto.call(x / y)
-  nil
 end
 
 # TODO: Show how you would use combinations of these functions and `method(:puts)`
@@ -53,15 +46,6 @@ end
 # 2*(10-2)/4 + 3.
 
 # Your code here...
-# sub(10, 2, -> (x) {
-#   mul(2, x, -> (y) {
-#     div(y, 4, -> (z) {
-#       mul(2, z, -> (w) {
-#         add(w, 3, method(:puts))
-#       })
-#     })
-#   })
-# })
 
 # -----------------------------------------------------------------------------
 # Part 2 : Comparisons and Conditionals
@@ -69,16 +53,10 @@ end
 # Let's add a few comparison operations into the mix.
 
 def eq(x, y, goto) 
-  goto.call(x == y)
-  nil
 end
 def lt(x, y, goto) 
-  goto.call(x < y)
-  nil
 end
 def gt(x, y, goto) 
-  goto.call(x > y)
-  nil
 end
 
 # TODO: Implement a function to compute the maximum value of x and y.
@@ -88,18 +66,9 @@ end
 
 # Branch based on cond to true or false goto
 def branch(cond, true_goto, false_goto)
-  {true => true_goto, false => false_goto}[cond].call()
-  nil
 end
 
 def maxvalue(x, y, goto)
-  gt(x, y, -> (is_greater) {
-    branch(is_greater,
-      -> { goto.call(x) }, 
-      -> { goto.call(y) })
-  })
-  nil
-  # ...
 end
 
 # maxvalue(2, 3, method(:puts))    # -> Prints 3
@@ -113,18 +82,6 @@ end
 # the result of summing the first N integers (1 + 2 + 3 + ... + N)?
 
 def sum_n(n, acc, goto)
-  eq(n, 0, -> (is_zero) {
-    branch(is_zero,
-      -> { goto.call(acc) }, 
-      -> {
-      sub(n, 1, -> (n_minus_1) {
-        add(n, acc, -> (acc_plus_n) {
-          sum_n(n_minus_1, acc_plus_n, goto)
-        })
-      })
-    })
-  })
-  nil
 end
 
 # puts "-------------------------------"
@@ -132,8 +89,8 @@ end
 # puts "-------------------------------"
 # sum_n(100, 0, method(:puts))     # -> Prints 5050
 # puts "-------------------------------"
-sum_n(100, 0, method(:puts))     # -> Prints 5050
-sum_n(1_000_000, 0, method(:puts))
+# sum_n(100, 0, method(:puts))     # -> Prints 5050
+# sum_n(1_000_000, 0, method(:puts))
 # -----------------------------------------------------------------------------
 # Part 4 : S-Expressions
 #
@@ -145,30 +102,12 @@ sum_n(1_000_000, 0, method(:puts))
 
 def eval_expression(sexp, goto)
   # Computes the value of sexp and calls goto.call(value) afterwards
-  {
-    "Integer" => -> (s, g) {g.call(s)},
-    "Array" => method(:eval_operator)
-  }[sexp.class.name].call(sexp, goto)
-  nil
 end
 
 def eval_operator(sexp, goto)
-  eval_expression(sexp[1], -> (left) {
-    eval_expression(sexp[2], -> (right) {
-      do_op(sexp[0], left, right, goto)
-    })
-  })
-  nil
 end
 
 def do_op(op, left, right, goto) 
-  {
-    :+ => -> {add(left, right, goto)},
-    :- => -> {sub(left, right, goto)},
-    :* => -> {mul(left, right, goto)},
-    :/ => -> {div(left, right, goto)}
-  }[op].call()
-  nil
 end
 
 # puts "-------------------------------"
@@ -188,11 +127,6 @@ end
 # strings to integers. Keep in mind you can't use `if` to check a return value.
 
 def convert_int(text, success, failure)
-  is_digit = !!(text.to_s =~ /\A\d+\z/)
-  branch(is_digit,
-  -> {success.call(text.to_i)},
-  -> {failure.call("ValueError: '#{text}' is not an integer")}
-  )
 end
 
 # convert_int("123", method(:puts), method(:puts))
